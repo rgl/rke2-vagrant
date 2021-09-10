@@ -18,12 +18,15 @@ krew_version = 'v0.4.1'
 
 number_of_server_nodes  = 1
 number_of_agent_nodes   = 1
+number_of_agentw_nodes  = 1
 
 first_server_node_ip    = '10.11.0.101'
 first_agent_node_ip     = '10.11.0.201'
+first_agentw_node_ip    = '10.11.0.211'
 
 server_node_ip_address  = IPAddr.new first_server_node_ip
 agent_node_ip_address   = IPAddr.new first_agent_node_ip
+agentw_node_ip_address  = IPAddr.new first_agentw_node_ip
 
 domain                  = 'rke2.test'
 rke2_server_domain      = "server.#{domain}"
@@ -92,6 +95,40 @@ Vagrant.configure(2) do |config|
       end
       config.vm.provision 'shell', path: 'provision-base.sh'
       config.vm.provision 'shell', path: 'provision-rke2-agent.sh', args: [
+        rke2_channel,
+        rke2_version,
+        rke2_server_url,
+        ip_address
+      ]
+    end
+  end
+
+  (1..number_of_agentw_nodes).each do |n|
+    name = "agentw#{n}"
+    ip_address = agentw_node_ip_address.to_s; agentw_node_ip_address = agentw_node_ip_address.succ
+
+    config.vm.define name do |config|
+      config.vm.box = 'windows-2019-amd64'
+      config.vm.provider 'libvirt' do |lv, config|
+        lv.memory = 4*1024
+        config.vm.synced_folder '.', '/vagrant',
+          type: 'smb',
+          smb_username: ENV['VAGRANT_SMB_USERNAME'] || ENV['USER'],
+          smb_password: ENV['VAGRANT_SMB_PASSWORD']
+      end
+      config.vm.hostname = name
+      config.vm.network :private_network, ip: ip_address, libvirt__forward_mode: 'none', libvirt__dhcp_enabled: false
+      config.vm.provision 'hosts' do |hosts|
+        hosts.autoconfigure = true
+        hosts.sync_hosts = true
+        hosts.add_localhost_hostnames = false
+        hosts.add_host first_server_node_ip, [rke2_server_domain]
+      end
+      config.vm.provision 'shell', path: 'ps.ps1', args: 'provision-containers-feature.ps1', reboot: true
+      config.vm.provision 'shell', inline: "$env:chocolateyVersion='0.11.2'; iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex", name: "Install Chocolatey"
+      config.vm.provision 'shell', path: 'ps.ps1', args: 'provision-base.ps1'
+      config.vm.provision 'shell', path: 'ps.ps1', args: [
+        'provision-rke2-agent.ps1',
         rke2_channel,
         rke2_version,
         rke2_server_url,

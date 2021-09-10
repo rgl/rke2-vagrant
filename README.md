@@ -69,3 +69,18 @@ vagrant ssh server1
 sudo su -l
 k9s
 ```
+
+# Windows
+
+Notes:
+
+* **I would not yet use rke2 on Windows (see the [Windows Issues section](#windows-issues))**.
+* Windows has a dedicated issue tracker at https://github.com/rancher/windows.
+* [Windows and Linux Cluster Feature Parity](https://rancher.com/docs/rancher/v2.6/en/cluster-provisioning/rke-clusters/windows-clusters/windows-parity/)
+
+## Windows Issues
+
+* [Windows agent doesn't always cleanup child processes like containerd #1470](https://github.com/rancher/rke2/issues/1470)
+* [Processes should stop when stopping rke2 process on windows agent #1755](https://github.com/rancher/rke2/issues/1755)
+* [Windows service does not log the started services like kube-proxy anywhere #1807](https://github.com/rancher/rke2/issues/1807)
+* [Support HostProcess containers in 1.22+ #100](https://github.com/rancher/windows/issues/100)
