@@ -4,12 +4,6 @@ ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 
 require 'ipaddr'
 
-def get_or_generate_rke2_token
-  # TODO generate an unique random an cache it.
-  # generated with openssl rand -hex 32
-  '7e982a7bbac5f385ecbb988f800787bc9bb617552813a63c4469521c53d83b6e'
-end
-
 # see https://update.rke2.io/v1-release/channels
 # see https://github.com/rancher/rke2/releases
 rke2_channel = 'latest'
@@ -30,7 +24,6 @@ first_agent_node_ip     = '10.11.0.201'
 
 server_node_ip_address  = IPAddr.new first_server_node_ip
 agent_node_ip_address   = IPAddr.new first_agent_node_ip
-rke2_token              = get_or_generate_rke2_token
 
 Vagrant.configure(2) do |config|
   config.vm.box = 'ubuntu-20.04-amd64'
@@ -67,7 +60,6 @@ Vagrant.configure(2) do |config|
         n == 1 ? "cluster-init" : "cluster-join",
         rke2_channel,
         rke2_version,
-        rke2_token,
         ip_address,
         krew_version
       ]
@@ -99,7 +91,6 @@ Vagrant.configure(2) do |config|
         rke2_channel,
         rke2_version,
         "https://server.#{domain}:9345",
-        rke2_token,
         ip_address
       ]
     end

@@ -4,7 +4,6 @@ set -euxo pipefail
 rke2_channel="$1"; shift
 rke2_version="$1"; shift
 rke2_server_url="$1"; shift
-rke2_token="$1"; shift
 ip_address="$1"; shift
 
 # configure the motd.
@@ -33,7 +32,7 @@ install -d -m 700 /etc/rancher/rke2
 install /dev/null -m 600 /etc/rancher/rke2/config.yaml
 cat >>/etc/rancher/rke2/config.yaml <<EOF
 server: $rke2_server_url
-token: $rke2_token
+token: $(cat /vagrant/tmp/node-token)
 node-ip: $ip_address
 EOF
 curl -sfL https://raw.githubusercontent.com/rancher/rke2/$rke2_version/install.sh \

@@ -4,7 +4,6 @@ set -euxo pipefail
 rke2_command="$1"; shift
 rke2_channel="${1:-latest}"; shift
 rke2_version="${1:-v1.21.4+rke2r2}"; shift
-rke2_token="$1"; shift
 ip_address="$1"; shift
 krew_version="${1:-v0.4.1}"; shift || true # NB see https://github.com/kubernetes-sigs/krew
 fqdn="$(hostname --fqdn)"
@@ -35,10 +34,10 @@ install /dev/null -m 600 /etc/rancher/rke2/config.yaml
 if [ "$rke2_command" != 'cluster-init' ]; then
   cat >>/etc/rancher/rke2/config.yaml <<EOF
 server: $rke2_url
+token: $(cat /vagrant/tmp/node-token)
 EOF
 fi
 cat >>/etc/rancher/rke2/config.yaml <<EOF
-token: $rke2_token
 node-ip: $ip_address
 node-taint: CriticalAddonsOnly=true:NoExecute
 tls-san:
@@ -83,6 +82,18 @@ $SHELL -c 'node_name=$(hostname); echo "waiting for node $node_name to be ready.
 # wait for the kube-dns pod to be Running.
 # e.g. coredns-fb8b8dccf-rh4fg   1/1     Running   0          33m
 $SHELL -c 'while [ -z "$(kubectl get pods --selector k8s-app=kube-dns --namespace kube-system | grep -E "\s+Running\s+")" ]; do sleep 3; done'
+
+# save the node-token in the host.
+# NB do not create a token yourself as a simple hex random string, as that will
+#    not include the Cluster CA which means the joining nodes will not
+#    verify the server certificate. rke2 warns about this as:
+#       Cluster CA certificate is not trusted by the host CA bundle, but the
+#       token does not include a CA hash. Use the full token from the server's
+#       node-token file to enable Cluster CA validation
+if [ "$rke2_command" == 'cluster-init' ]; then
+  install -d /vagrant/tmp
+  cp /var/lib/rancher/rke2/server/node-token /vagrant/tmp/node-token
+fi
 
 # install the krew kubectl package manager.
 echo "installing the krew $krew_version kubectl package manager..."
