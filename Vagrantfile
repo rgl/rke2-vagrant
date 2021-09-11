@@ -7,7 +7,7 @@ require 'ipaddr'
 # see https://update.rke2.io/v1-release/channels
 # see https://github.com/rancher/rke2/releases
 rke2_channel = 'latest'
-rke2_version = 'v1.21.4+rke2r2'
+rke2_version = 'v1.21.4+rke2r3'
 # see https://github.com/etcd-io/etcd/releases
 # NB make sure you use the same version as rke2.
 etcdctl_version = 'v3.4.16'

@@ -3,7 +3,7 @@ set -euxo pipefail
 
 rke2_command="$1"; shift
 rke2_channel="${1:-latest}"; shift
-rke2_version="${1:-v1.21.4+rke2r2}"; shift
+rke2_version="${1:-v1.21.4+rke2r3}"; shift
 ip_address="$1"; shift
 krew_version="${1:-v0.4.1}"; shift || true # NB see https://github.com/kubernetes-sigs/krew
 fqdn="$(hostname --fqdn)"
@@ -76,7 +76,7 @@ EOF
 source /etc/profile.d/01-rke2.sh
 
 # wait for this node to be Ready.
-# e.g. server     Ready    control-plane,master   3m    v1.21.4+rke2r2
+# e.g. server     Ready    control-plane,master   3m    v1.21.4+rke2r3
 $SHELL -c 'node_name=$(hostname); echo "waiting for node $node_name to be ready..."; while [ -z "$(kubectl get nodes $node_name | grep -E "$node_name\s+Ready\s+")" ]; do sleep 3; done; echo "node ready!"'
 
 # wait for the kube-dns pod to be Running.
@@ -113,8 +113,6 @@ crictl completion bash >/usr/share/bash-completion/completions/crictl
 kubectl completion bash >/usr/share/bash-completion/completions/kubectl
 
 # save kubeconfig in the host.
-# NB the default users are generated at https://github.com/rancher/rke2/blob/v1.21.4+rke2r2/pkg/daemons/control/deps/deps.go#L206
-#    and saved at /var/lib/rancher/rke2/server/cred/passwd
 if [ "$rke2_command" == 'cluster-init' ]; then
   mkdir -p /vagrant/tmp
   python3 - <<EOF
