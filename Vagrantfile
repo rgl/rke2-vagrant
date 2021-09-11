@@ -18,12 +18,16 @@ krew_version = 'v0.4.1'
 
 number_of_server_nodes  = 1
 number_of_agent_nodes   = 1
-domain                  = 'rke2.test'
+
 first_server_node_ip    = '10.11.0.101'
 first_agent_node_ip     = '10.11.0.201'
 
 server_node_ip_address  = IPAddr.new first_server_node_ip
 agent_node_ip_address   = IPAddr.new first_agent_node_ip
+
+domain                  = 'rke2.test'
+rke2_server_domain      = "server.#{domain}"
+rke2_server_url         = "https://#{rke2_server_domain}:9345"
 
 Vagrant.configure(2) do |config|
   config.vm.box = 'ubuntu-20.04-amd64'
@@ -51,7 +55,7 @@ Vagrant.configure(2) do |config|
         hosts.autoconfigure = true
         hosts.sync_hosts = true
         hosts.add_localhost_hostnames = false
-        hosts.add_host first_server_node_ip, ["server.#{domain}"]
+        hosts.add_host first_server_node_ip, [rke2_server_domain]
       end
       config.vm.provision 'shell', path: 'provision-base.sh'
       config.vm.provision 'shell', path: 'provision-etcdctl.sh', args: [etcdctl_version]
@@ -84,13 +88,13 @@ Vagrant.configure(2) do |config|
         hosts.autoconfigure = true
         hosts.sync_hosts = true
         hosts.add_localhost_hostnames = false
-        hosts.add_host first_server_node_ip, ["server.#{domain}"]
+        hosts.add_host first_server_node_ip, [rke2_server_domain]
       end
       config.vm.provision 'shell', path: 'provision-base.sh'
       config.vm.provision 'shell', path: 'provision-rke2-agent.sh', args: [
         rke2_channel,
         rke2_version,
-        "https://server.#{domain}:9345",
+        rke2_server_url,
         ip_address
       ]
     end
