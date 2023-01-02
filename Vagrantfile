@@ -14,7 +14,7 @@ etcdctl_version = 'v3.4.16'
 # see https://github.com/derailed/k9s/releases
 k9s_version = 'v0.24.15'
 # see https://github.com/kubernetes-sigs/krew/releases
-krew_version = 'v0.4.1'
+krew_version = 'v0.4.3'
 
 number_of_server_nodes  = 1
 number_of_agent_nodes   = 1

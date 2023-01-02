@@ -5,7 +5,7 @@ rke2_command="$1"; shift
 rke2_channel="${1:-latest}"; shift
 rke2_version="${1:-v1.21.5+rke2r1}"; shift
 ip_address="$1"; shift
-krew_version="${1:-v0.4.1}"; shift || true # NB see https://github.com/kubernetes-sigs/krew
+krew_version="${1:-v0.4.3}"; shift || true # NB see https://github.com/kubernetes-sigs/krew
 fqdn="$(hostname --fqdn)"
 rke2_url="https://server.$(hostname --domain):9345"
 
@@ -102,7 +102,7 @@ fi
 # install the krew kubectl package manager.
 echo "installing the krew $krew_version kubectl package manager..."
 apt-get install -y --no-install-recommends git
-wget -qO- "https://github.com/kubernetes-sigs/krew/releases/download/$krew_version/krew.tar.gz" | tar xzf - ./krew-linux_amd64
+wget -qO- "https://github.com/kubernetes-sigs/krew/releases/download/$krew_version/krew-linux_amd64.tar.gz" | tar xzf - ./krew-linux_amd64
 wget -q "https://github.com/kubernetes-sigs/krew/releases/download/$krew_version/krew.yaml"
 ./krew-linux_amd64 install --manifest=krew.yaml
 rm krew-linux_amd64
