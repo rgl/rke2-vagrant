@@ -44,7 +44,7 @@ SERVER_NODES  = generate_nodes(FIRST_SERVER_NODE_IP, NUMBER_OF_SERVER_NODES, 'se
 AGENT_NODES   = generate_nodes(FIRST_AGENT_NODE_IP, NUMBER_OF_AGENT_NODES, 'agent')
 
 Vagrant.configure(2) do |config|
-  config.vm.box = 'ubuntu-20.04-amd64'
+  config.vm.box = 'ubuntu-22.04-amd64'
 
   config.vm.provider 'libvirt' do |lv, config|
     lv.cpus = 2

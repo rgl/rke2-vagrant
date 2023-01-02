@@ -11,7 +11,7 @@ Configure your hosts file with:
 10.11.0.201 example-app.rke2.test
 ```
 
-Install the base [Ubuntu 20.04 vagrant box](https://github.com/rgl/ubuntu-vagrant).
+Install the base [Ubuntu 22.04 vagrant box](https://github.com/rgl/ubuntu-vagrant).
 
 Launch the environment:
 
