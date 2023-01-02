@@ -29,6 +29,10 @@ domain                  = 'rke2.test'
 rke2_server_domain      = "server.#{domain}"
 rke2_server_url         = "https://#{rke2_server_domain}:9345"
 
+extra_hosts = """
+#{first_server_node_ip} #{rke2_server_domain}
+"""
+
 Vagrant.configure(2) do |config|
   config.vm.box = 'ubuntu-20.04-amd64'
 
@@ -51,13 +55,7 @@ Vagrant.configure(2) do |config|
       end
       config.vm.hostname = fqdn
       config.vm.network :private_network, ip: ip_address, libvirt__forward_mode: 'none', libvirt__dhcp_enabled: false
-      config.vm.provision 'hosts' do |hosts|
-        hosts.autoconfigure = true
-        hosts.sync_hosts = true
-        hosts.add_localhost_hostnames = false
-        hosts.add_host first_server_node_ip, [rke2_server_domain]
-      end
-      config.vm.provision 'shell', path: 'provision-base.sh'
+      config.vm.provision 'shell', path: 'provision-base.sh', args: [extra_hosts]
       config.vm.provision 'shell', path: 'provision-etcdctl.sh', args: [etcdctl_version]
       config.vm.provision 'shell', path: 'provision-k9s.sh', args: [k9s_version]
       config.vm.provision 'shell', path: 'provision-rke2-server.sh', args: [
@@ -84,13 +82,7 @@ Vagrant.configure(2) do |config|
       end
       config.vm.hostname = fqdn
       config.vm.network :private_network, ip: ip_address, libvirt__forward_mode: 'none', libvirt__dhcp_enabled: false
-      config.vm.provision 'hosts' do |hosts|
-        hosts.autoconfigure = true
-        hosts.sync_hosts = true
-        hosts.add_localhost_hostnames = false
-        hosts.add_host first_server_node_ip, [rke2_server_domain]
-      end
-      config.vm.provision 'shell', path: 'provision-base.sh'
+      config.vm.provision 'shell', path: 'provision-base.sh', args: [extra_hosts]
       config.vm.provision 'shell', path: 'provision-rke2-agent.sh', args: [
         rke2_channel,
         rke2_version,

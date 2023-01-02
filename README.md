@@ -13,14 +13,6 @@ Configure your hosts file with:
 
 Install the base [Ubuntu 20.04 vagrant box](https://github.com/rgl/ubuntu-vagrant).
 
-Install the required vagrant plugins:
-
-```bash
-# see https://github.com/hashicorp/vagrant/issues/12445#issuecomment-876566065
-export CFLAGS='-I/opt/vagrant/embedded/include/ruby-3.0.0/ruby'
-vagrant plugin install vagrant-hosts
-```
-
 Launch the environment:
 
 ```bash
