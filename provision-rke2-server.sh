@@ -3,7 +3,7 @@ set -euxo pipefail
 
 rke2_command="$1"; shift
 rke2_channel="${1:-latest}"; shift
-rke2_version="${1:-v1.21.5+rke2r1}"; shift
+rke2_version="${1:-v1.24.9+rke2r1}"; shift
 ip_address="$1"; shift
 krew_version="${1:-v0.4.3}"; shift || true # NB see https://github.com/kubernetes-sigs/krew
 fqdn="$(hostname --fqdn)"
@@ -27,8 +27,8 @@ cat >/etc/motd <<'EOF'
 EOF
 
 # configure the rke2 server.
-# see https://docs.rke2.io/install/install_options/install_options/
-# see https://docs.rke2.io/install/install_options/server_config/
+# see https://docs.rke2.io/install/configuration
+# see https://docs.rke2.io/reference/server_config
 install -d -m 700 /etc/rancher/rke2
 install /dev/null -m 600 /etc/rancher/rke2/config.yaml
 if [ "$rke2_command" != 'cluster-init' ]; then
@@ -51,8 +51,8 @@ cluster-domain: cluster.local
 EOF
 
 # install rke2 server.
-# see https://docs.rke2.io/install/install_options/install_options/
-# see https://docs.rke2.io/install/install_options/server_config/
+# see https://docs.rke2.io/install/configuration
+# see https://docs.rke2.io/reference/server_config
 curl -sfL https://raw.githubusercontent.com/rancher/rke2/$rke2_version/install.sh \
   | \
     INSTALL_RKE2_CHANNEL="$rke2_channel" \
@@ -80,7 +80,7 @@ crictl completion bash >/usr/share/bash-completion/completions/crictl
 kubectl completion bash >/usr/share/bash-completion/completions/kubectl
 
 # wait for this node to be Ready.
-# e.g. server     Ready    control-plane,etcd,master   3m    v1.21.5+rke2r1
+# e.g. server     Ready    control-plane,etcd,master   3m    v1.24.9+rke2r1
 $SHELL -c 'node_name=$(hostname); echo "waiting for node $node_name to be ready..."; while [ -z "$(kubectl get nodes $node_name | grep -E "$node_name\s+Ready\s+")" ]; do sleep 3; done; echo "node ready!"'
 
 # wait for the kube-dns pod to be Running.

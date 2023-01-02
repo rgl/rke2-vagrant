@@ -7,7 +7,7 @@ domain="$(hostname --domain)"
 kubectl apply -f - <<EOF
 ---
 # see https://kubernetes.io/docs/concepts/services-networking/ingress/
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#ingress-v1-networking-k8s-io
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#ingress-v1-networking-k8s-io
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -26,7 +26,7 @@ spec:
                   name: web
 ---
 # see https://kubernetes.io/docs/concepts/services-networking/service/
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#service-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#service-v1-core
 apiVersion: v1
 kind: Service
 metadata:
@@ -42,9 +42,9 @@ spec:
       targetPort: web
 ---
 # see https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#daemonset-v1-apps
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#podtemplatespec-v1-core
-# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#container-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#daemonset-v1-apps
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#podtemplatespec-v1-core
+# see https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#container-v1-core
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -62,7 +62,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: example-app
-          image: ruilopes/example-docker-buildx-go:v1.2.0
+          image: ruilopes/example-docker-buildx-go:v1.10.0
           args:
             - -listen=:8000
           ports:

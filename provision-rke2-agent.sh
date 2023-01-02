@@ -26,8 +26,8 @@ cat >/etc/motd <<'EOF'
 EOF
 
 # install rke2 agent.
-# see https://docs.rke2.io/install/install_options/install_options/
-# see https://docs.rke2.io/install/install_options/linux_agent_config/
+# see https://docs.rke2.io/install/configuration
+# see https://docs.rke2.io/reference/linux_agent_config
 install -d -m 700 /etc/rancher/rke2
 install /dev/null -m 600 /etc/rancher/rke2/config.yaml
 cat >>/etc/rancher/rke2/config.yaml <<EOF

@@ -7,10 +7,10 @@ require 'ipaddr'
 # see https://update.rke2.io/v1-release/channels
 # see https://github.com/rancher/rke2/releases
 rke2_channel = 'latest'
-rke2_version = 'v1.21.5+rke2r1'
+rke2_version = 'v1.24.9+rke2r1'
 # see https://github.com/etcd-io/etcd/releases
 # NB make sure you use the same version as rke2.
-etcdctl_version = 'v3.4.16'
+etcdctl_version = 'v3.5.4'
 # see https://github.com/derailed/k9s/releases
 k9s_version = 'v0.26.7'
 # see https://github.com/kubernetes-sigs/krew/releases
@@ -47,7 +47,7 @@ Vagrant.configure(2) do |config|
 
     config.vm.define name do |config|
       config.vm.provider 'libvirt' do |lv, config|
-        lv.memory = 2*1024
+        lv.memory = 3*1024
       end
       config.vm.hostname = fqdn
       config.vm.network :private_network, ip: ip_address, libvirt__forward_mode: 'none', libvirt__dhcp_enabled: false
@@ -80,7 +80,7 @@ Vagrant.configure(2) do |config|
 
     config.vm.define name do |config|
       config.vm.provider 'libvirt' do |lv, config|
-        lv.memory = 2*1024
+        lv.memory = 3*1024
       end
       config.vm.hostname = fqdn
       config.vm.network :private_network, ip: ip_address, libvirt__forward_mode: 'none', libvirt__dhcp_enabled: false
