@@ -75,6 +75,10 @@ export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
 EOF
 source /etc/profile.d/01-rke2.sh
 
+# install the bash completion scripts.
+crictl completion bash >/usr/share/bash-completion/completions/crictl
+kubectl completion bash >/usr/share/bash-completion/completions/kubectl
+
 # wait for this node to be Ready.
 # e.g. server     Ready    control-plane,etcd,master   3m    v1.21.5+rke2r1
 $SHELL -c 'node_name=$(hostname); echo "waiting for node $node_name to be ready..."; while [ -z "$(kubectl get nodes $node_name | grep -E "$node_name\s+Ready\s+")" ]; do sleep 3; done; echo "node ready!"'
@@ -107,10 +111,6 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 EOF
 source /etc/profile.d/krew.sh
 kubectl krew version
-
-# install the bash completion scripts.
-crictl completion bash >/usr/share/bash-completion/completions/crictl
-kubectl completion bash >/usr/share/bash-completion/completions/kubectl
 
 # save kubeconfig in the host.
 if [ "$rke2_command" == 'cluster-init' ]; then
