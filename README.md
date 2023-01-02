@@ -37,6 +37,10 @@ kubectl cluster-info
 kubectl get nodes -o wide
 ```
 
+Access the example application:
+
+http://example-app.rke2.test
+
 ## Kubernetes API
 
 Access the Kubernetes API at:
