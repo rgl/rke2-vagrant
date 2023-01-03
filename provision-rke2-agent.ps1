@@ -3,7 +3,7 @@ param(
     [string]$rke2Channel = 'latest',
 
     [Parameter(Mandatory=$true)]
-    [string]$rke2Version = 'v1.24.9+rke2r1',
+    [string]$rke2Version = 'v1.25.5+rke2r1',
 
     [Parameter(Mandatory=$true)]
     [string]$rke2ServerUrl = 'https://server.rke2.test:9345',
