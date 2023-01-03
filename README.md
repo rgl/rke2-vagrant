@@ -13,6 +13,8 @@ Configure your hosts file with:
 
 Install the base [Ubuntu 22.04 vagrant box](https://github.com/rgl/ubuntu-vagrant).
 
+Install the base [Windows 2022 vagrant box](https://github.com/rgl/windows-vagrant).
+
 Launch the environment:
 
 ```bash
@@ -29,7 +31,8 @@ kubectl cluster-info
 kubectl get nodes -o wide
 ```
 
-Access the example application:
+Access the example application and notice the `GOOS` property value
+round-robin between `linux` and `windows`:
 
 http://example-app.rke2.test
 
@@ -73,3 +76,10 @@ vagrant ssh server1
 sudo su -l
 k9s
 ```
+
+# References
+
+* [rancher/rke2 repository](https://github.com/rancher/rke2).
+* [rancher/windows repository](https://github.com/rancher/windows).
+* [Windows and Linux Cluster Feature Parity](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-clusters-in-rancher-setup/use-windows-clusters/windows-linux-cluster-feature-parity).
+* [Windows Operational Readiness](https://github.com/kubernetes-sigs/windows-operational-readiness).

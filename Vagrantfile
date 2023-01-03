@@ -20,11 +20,15 @@ DOMAIN                  = 'rke2.test'
 RKE2_SERVER_DOMAIN      = "server.#{DOMAIN}"
 RKE2_SERVER_URL         = "https://#{RKE2_SERVER_DOMAIN}:9345"
 
+RKE2_WINDOWS_SERVICE_USE_NSSM = true
+
 NUMBER_OF_SERVER_NODES  = 1
 NUMBER_OF_AGENT_NODES   = 1
+NUMBER_OF_AGENTW_NODES  = 1
 
 FIRST_SERVER_NODE_IP    = '10.11.0.101'
 FIRST_AGENT_NODE_IP     = '10.11.0.201'
+FIRST_AGENTW_NODE_IP    = '10.11.0.211'
 
 EXTRA_HOSTS = """
 #{FIRST_SERVER_NODE_IP} #{RKE2_SERVER_DOMAIN}
@@ -42,6 +46,7 @@ end
 
 SERVER_NODES  = generate_nodes(FIRST_SERVER_NODE_IP, NUMBER_OF_SERVER_NODES, 'server')
 AGENT_NODES   = generate_nodes(FIRST_AGENT_NODE_IP, NUMBER_OF_AGENT_NODES, 'agent')
+AGENTW_NODES  = generate_nodes(FIRST_AGENTW_NODE_IP, NUMBER_OF_AGENTW_NODES, 'agentw')
 
 Vagrant.configure(2) do |config|
   config.vm.box = 'ubuntu-22.04-amd64'
@@ -90,6 +95,32 @@ Vagrant.configure(2) do |config|
         RKE2_VERSION,
         RKE2_SERVER_URL,
         ip_address
+      ]
+    end
+  end
+
+  AGENTW_NODES.each do |name, fqdn, ip_address, n|
+    config.vm.define name do |config|
+      config.vm.box = 'windows-2022-amd64'
+      config.vm.provider 'libvirt' do |lv, config|
+        lv.memory = 4*1024
+        config.vm.synced_folder '.', '/vagrant',
+          type: 'smb',
+          smb_username: ENV['VAGRANT_SMB_USERNAME'] || ENV['USER'],
+          smb_password: ENV['VAGRANT_SMB_PASSWORD']
+      end
+      config.vm.hostname = name
+      config.vm.network :private_network, ip: ip_address, libvirt__forward_mode: 'none', libvirt__dhcp_enabled: false
+      config.vm.provision 'shell', path: 'ps.ps1', args: 'provision-containers-feature.ps1', reboot: true
+      config.vm.provision 'shell', path: 'ps.ps1', args: 'provision-chocolatey.ps1'
+      config.vm.provision 'shell', path: 'ps.ps1', args: ['provision-base.ps1', EXTRA_HOSTS]
+      config.vm.provision 'shell', path: 'ps.ps1', args: [
+        'provision-rke2-agent.ps1',
+        RKE2_CHANNEL,
+        RKE2_VERSION,
+        RKE2_SERVER_URL,
+        ip_address,
+        RKE2_WINDOWS_SERVICE_USE_NSSM && '1' || '0'
       ]
     end
   end
