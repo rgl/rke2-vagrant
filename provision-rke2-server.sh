@@ -3,7 +3,7 @@ set -euxo pipefail
 
 rke2_command="$1"; shift
 rke2_channel="${1:-latest}"; shift
-rke2_version="${1:-v1.26.0+rke2r1}"; shift
+rke2_version="${1:-v1.26.0+rke2r2}"; shift
 ip_address="$1"; shift
 krew_version="${1:-v0.4.3}"; shift || true # NB see https://github.com/kubernetes-sigs/krew
 fqdn="$(hostname --fqdn)"
@@ -80,7 +80,7 @@ crictl completion bash >/usr/share/bash-completion/completions/crictl
 kubectl completion bash >/usr/share/bash-completion/completions/kubectl
 
 # wait for this node to be Ready.
-# e.g. server     Ready    control-plane,etcd,master   3m    v1.26.0+rke2r1
+# e.g. server     Ready    control-plane,etcd,master   3m    v1.26.0+rke2r2
 $SHELL -c 'node_name=$(hostname); echo "waiting for node $node_name to be ready..."; while [ -z "$(kubectl get nodes $node_name | grep -E "$node_name\s+Ready\s+")" ]; do sleep 3; done; echo "node ready!"'
 
 # wait for the kube-dns pod to be Running.
