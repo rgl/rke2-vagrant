@@ -7,10 +7,10 @@ require 'ipaddr'
 # see https://update.rke2.io/v1-release/channels
 # see https://github.com/rancher/rke2/releases
 RKE2_CHANNEL = 'latest'
-RKE2_VERSION = 'v1.26.0+rke2r2'
+RKE2_VERSION = 'v1.26.11+rke2r1'
 # see https://github.com/etcd-io/etcd/releases
-# NB make sure you use the same version as rke2.
-ETCDCTL_VERSION = 'v3.5.5'
+# NB make sure you use a version compatible with rke2 etcd.
+ETCDCTL_VERSION = 'v3.5.11'
 # see https://github.com/derailed/k9s/releases
 K9S_VERSION = 'v0.29.1'
 # see https://github.com/kubernetes-sigs/krew/releases
