@@ -62,7 +62,7 @@ Vagrant.configure(2) do |config|
   SERVER_NODES.each do |name, fqdn, ip_address, n|
     config.vm.define name do |config|
       config.vm.provider 'libvirt' do |lv, config|
-        lv.memory = 3*1024
+        lv.memory = 4*1024
       end
       config.vm.hostname = fqdn
       config.vm.network :private_network, ip: ip_address, libvirt__forward_mode: 'none', libvirt__dhcp_enabled: false
@@ -85,7 +85,7 @@ Vagrant.configure(2) do |config|
   AGENT_NODES.each do |name, fqdn, ip_address, n|
     config.vm.define name do |config|
       config.vm.provider 'libvirt' do |lv, config|
-        lv.memory = 3*1024
+        lv.memory = 4*1024
       end
       config.vm.hostname = fqdn
       config.vm.network :private_network, ip: ip_address, libvirt__forward_mode: 'none', libvirt__dhcp_enabled: false
