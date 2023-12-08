@@ -12,7 +12,7 @@ RKE2_VERSION = 'v1.26.0+rke2r2'
 # NB make sure you use the same version as rke2.
 ETCDCTL_VERSION = 'v3.5.5'
 # see https://github.com/derailed/k9s/releases
-K9S_VERSION = 'v0.27.0'
+K9S_VERSION = 'v0.29.1'
 # see https://github.com/kubernetes-sigs/krew/releases
 KREW_VERSION = 'v0.4.4'
 
