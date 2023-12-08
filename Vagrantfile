@@ -11,6 +11,8 @@ RKE2_VERSION = 'v1.26.11+rke2r1'
 # see https://github.com/etcd-io/etcd/releases
 # NB make sure you use a version compatible with rke2 etcd.
 ETCDCTL_VERSION = 'v3.5.11'
+# see https://github.com/kube-vip/kube-vip/releases
+KUBE_VIP_VERSION = 'v0.6.4'
 # see https://github.com/derailed/k9s/releases
 K9S_VERSION = 'v0.29.1'
 # see https://github.com/kubernetes-sigs/krew/releases
@@ -26,12 +28,13 @@ NUMBER_OF_SERVER_NODES  = 1
 NUMBER_OF_AGENT_NODES   = 1
 NUMBER_OF_AGENTW_NODES  = 1
 
+RKE2_SERVER_VIP         = '10.11.0.100'
 FIRST_SERVER_NODE_IP    = '10.11.0.101'
 FIRST_AGENT_NODE_IP     = '10.11.0.201'
 FIRST_AGENTW_NODE_IP    = '10.11.0.211'
 
 EXTRA_HOSTS = """
-#{FIRST_SERVER_NODE_IP} #{RKE2_SERVER_DOMAIN}
+#{RKE2_SERVER_VIP} #{RKE2_SERVER_DOMAIN}
 """
 
 def generate_nodes(first_ip_address, count, name_prefix)
@@ -75,9 +78,11 @@ Vagrant.configure(2) do |config|
         RKE2_CHANNEL,
         RKE2_VERSION,
         ip_address,
+        RKE2_SERVER_DOMAIN,
         KREW_VERSION
       ]
       if n == 1
+        config.vm.provision 'shell', path: 'provision-kube-vip.sh', args: [KUBE_VIP_VERSION, RKE2_SERVER_VIP, RKE2_SERVER_DOMAIN]
         config.vm.provision 'shell', path: 'provision-example-app.sh'
       end
     end

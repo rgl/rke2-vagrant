@@ -7,7 +7,7 @@ This is a [rke2](https://github.com/rancher/rke2) kubernetes cluster playground 
 Configure your hosts file with:
 
 ```
-10.11.0.101 server.rke2.test
+10.11.0.100 server.rke2.test
 10.11.0.201 example-app.rke2.test
 ```
 

@@ -5,9 +5,10 @@ rke2_command="$1"; shift
 rke2_channel="${1:-latest}"; shift
 rke2_version="${1:-v1.26.11+rke2r1}"; shift
 ip_address="$1"; shift
+rke2_server_domain="$1"; shift
 krew_version="${1:-v0.4.4}"; shift || true # NB see https://github.com/kubernetes-sigs/krew
 fqdn="$(hostname --fqdn)"
-rke2_url="https://server.$(hostname --domain):9345"
+rke2_url="https://$rke2_server_domain:9345"
 
 # configure the motd.
 # NB this was generated at http://patorjk.com/software/taag/#p=display&f=Big&t=rke2%0Aserver.
@@ -41,8 +42,7 @@ cat >>/etc/rancher/rke2/config.yaml <<EOF
 node-ip: $ip_address
 node-taint: CriticalAddonsOnly=true:NoExecute
 tls-san:
- - server.$(hostname --domain)
- - $fqdn
+  - $rke2_server_domain
 cni: calico
 cluster-cidr: 10.12.0.0/16
 service-cidr: 10.13.0.0/16
@@ -129,11 +129,11 @@ for c in d['clusters']:
 for u in d['users']:
     open(f"/vagrant/tmp/{u['name']}-crt.pem", 'wb').write(base64.b64decode(u['user']['client-certificate-data']))
     open(f"/vagrant/tmp/{u['name']}-key.pem", 'wb').write(base64.b64decode(u['user']['client-key-data']))
-    print(f"Kubernetes API Server https://$ip_address:6443 user {u['name']} client certificate in tmp/{u['name']}-*.pem")
+    print(f"Kubernetes API Server https://$rke2_server_domain:6443 user {u['name']} client certificate in tmp/{u['name']}-*.pem")
 
 # set the server ip.
 for c in d['clusters']:
-    c['cluster']['server'] = 'https://$ip_address:6443'
+    c['cluster']['server'] = 'https://$rke2_server_domain:6443'
 
 yaml.dump(d, open('/vagrant/tmp/admin.conf', 'w'), default_flow_style=False)
 EOF
