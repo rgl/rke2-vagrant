@@ -14,7 +14,7 @@ ETCDCTL_VERSION = 'v3.5.5'
 # see https://github.com/derailed/k9s/releases
 K9S_VERSION = 'v0.27.0'
 # see https://github.com/kubernetes-sigs/krew/releases
-KREW_VERSION = 'v0.4.3'
+KREW_VERSION = 'v0.4.4'
 
 DOMAIN                  = 'rke2.test'
 RKE2_SERVER_DOMAIN      = "server.#{DOMAIN}"

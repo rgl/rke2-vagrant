@@ -5,7 +5,7 @@ rke2_command="$1"; shift
 rke2_channel="${1:-latest}"; shift
 rke2_version="${1:-v1.26.0+rke2r2}"; shift
 ip_address="$1"; shift
-krew_version="${1:-v0.4.3}"; shift || true # NB see https://github.com/kubernetes-sigs/krew
+krew_version="${1:-v0.4.4}"; shift || true # NB see https://github.com/kubernetes-sigs/krew
 fqdn="$(hostname --fqdn)"
 rke2_url="https://server.$(hostname --domain):9345"
 
